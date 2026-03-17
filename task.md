@@ -1,254 +1,166 @@
-# Auto Content Publisher - 任务清单 (task.md)
+# Auto Content Publisher - 执行步骤文档
 
 ## 开发阶段
 
-- [ ] **Phase 1: 基础设施** - 配置管理 + 数据库 + 日志
-- [ ] **Phase 2: 采集模块** - RSS + HTTP 采集
-- [ ] **Phase 3: 内容处理** - AI 改写 + 敏感词过滤 + 摘要
-- [ ] **Phase 4: 发布模块** - 公众号 API 对接
-- [ ] **Phase 5: 调度中心** - 定时任务
-- [ ] **Phase 6: 集成测试** - 端到端测试
+### Phase 1: 基础框架
+
+**任务清单:**
+- [x] 1.1 创建项目目录结构
+- [x] 1.2 实现配置管理 (config.py)
+- [x] 1.3 实现数据库模型 (database.py)
+- [x] 1.4 实现日志系统 (logger.py)
+- [x] 1.5 创建配置文件 (config/settings.yaml)
+- [x] 1.6 编写 requirements.txt
+
+**完成标准:**
+- 配置文件能正常加载
+- 数据库表能正常创建
+- 日志能正常输出
 
 ---
 
-## Phase 1: 基础设施
+### Phase 2: 采集模块
 
-### T1.1 项目初始化
+**任务清单:**
+- [x] 2.1 实现 RSS 采集器 (scraper/rss_scraper.py)
+  - [x] 支持 RSS 2.0 和 Atom 格式
+  - [x] 支持多源批量采集
+- [x] 2.2 实现网页抓取器 (scraper/web_scraper.py)
+  - [x] 支持自定义 CSS 选择器
+  - [x] 支持图片提取
+- [x] 2.3 实现内容处理器 (processor/content_processor.py)
+  - [x] 内容去重 (MD5 指纹)
+  - [x] 关键词过滤
+  - [x] 摘要提取
+- [x] 2.4 实现任务调度器 (scheduler/task_scheduler.py)
+  - [x] 支持定时任务
+  - [x] 支持任务管理
+- [x] 2.5 实现发布器 (publisher/)
+  - [x] 微信公众号发布 (wechat_publisher.py)
+  - [x] 博客发布 (blog_publisher.py)
 
-- [ ] 创建 `src/` 目录结构
-- [ ] 创建 `config/` 目录
-- [ ] 创建 `data/logs/` 目录
-- [ ] 创建 `requirements.txt`
-
-```
-requirements.txt 内容:
-requests
-feedparser
-beautifulsoup4
-sqlalchemy
-pyyaml
-python-dotenv
-apscheduler
-openai
-```
-
-### T1.2 配置管理
-
-- [ ] 创建 `src/config.py`
-  - [ ] 从 `settings.yaml` 加载配置
-  - [ ] 从 `.env` 加载敏感配置
-  - [ ] 提供 Config 类
-- [ ] 创建 `config/settings.yaml` 示例配置
-
-### T1.3 数据库
-
-- [ ] 创建 `src/database.py`
-  - [ ] Article 模型
-  - [ ] Source 模型
-  - [ ] 初始化数据库
-  - [ ] CRUD 操作封装
-
-### T1.4 日志
-
-- [ ] 创建 `src/logger.py`
-  - [ ] 文件日志 (按天轮转)
-  - [ ] 控制台日志
-  - [ ] 记录采集、处理、发布各环节日志
+**完成标准:**
+- 能采集 RSS 源内容
+- 能抓取网页内容
+- 能检测重复内容
+- 能按关键词过滤
+- 能定时执行任务
 
 ---
 
-## Phase 2: 采集模块
+### Phase 3: API 与主程序
 
-### T2.1 采集基类
+**任务清单:**
+- [x] 3.1 实现 Flask REST API (api/__init__.py)
+  - [x] 订阅源管理接口
+  - [x] 采集触发接口
+  - [x] 文章查询接口
+  - [x] 发布接口
+  - [x] 调度器控制接口
+- [x] 3.2 实现主程序入口 (main.py)
+  - [x] CLI 参数解析
+  - [x] 多模式运行 (api/scheduler/fetch/publish)
+- [x] 3.3 完善 README 文档
+- [x] 3.4 创建 SPEC.md 规格文档
+- [x] 3.5 创建 requirements.md 需求文档
+- [x] 3.6 创建 design.md 设计文档
+- [x] 3.7 创建 task.md 执行文档
 
-- [ ] 创建 `src/scraper/__init__.py`
-- [ ] 创建 `src/scraper/base.py`
-  - [ ] BaseScraper 抽象类
-
-### T2.2 RSS 采集
-
-- [ ] 创建 `src/scraper/rss_scraper.py`
-  - [ ] fetch() 方法：获取文章列表
-  - [ ] 解析 title, link, published, summary
-  - [ ] 支持多个 RSS 源
-
-### T2.3 HTTP 采集
-
-- [ ] 创建 `src/scraper/http_scraper.py`
-  - [ ] fetch() 方法：列表页采集
-  - [ ] fetch_content() 方法：详情页采集
-  - [ ] 可配置 CSS selector
-
-### T2.4 采集调度
-
-- [ ] 创建 `src/scraper/manager.py`
-  - [ ] Source 管理：加载启用的数据源
-  - [ ] 增量采集：只抓新内容
-  - [ ] 重复检测：避免重复入库
+**完成标准:**
+- API 服务能正常启动
+- 各接口能正常工作
+- CLI 命令能正常执行
 
 ---
 
-## Phase 3: 内容处理
+## 部署步骤
 
-### T3.1 处理基类
-
-- [ ] 创建 `src/processor/__init__.py`
-- [ ] 创建 `src/processor/base.py`
-
-### T3.2 AI 改写
-
-- [ ] 创建 `src/processor/rewriter.py`
-  - [ ] OpenAI API 调用
-  - [ ] 改写 prompt 模板
-  - [ ] JSON 响应解析
-  - [ ] 支持流式输出（可选）
-
-### T3.3 摘要生成
-
-- [ ] 创建 `src/processor/summarizer.py`
-  - [ ] 从原文生成摘要
-  - [ ] 限制字数 (120-200字)
-
-### T3.4 敏感词过滤
-
-- [ ] 创建 `src/processor/filter.py`
-  - [ ] 加载敏感词库
-  - [ ] 检测敏感词
-  - [ ] 过滤/替换敏感词
-
-### T3.5 封面图处理
-
-- [ ] 创建 `src/processor/image_handler.py`
-  - [ ] 从原文提取图片
-  - [ ] 下载到本地缓存
-  - [ ] 上传到公众号获取 media_id
-
----
-
-## Phase 4: 发布模块
-
-### T4.1 发布基类
-
-- [ ] 创建 `src/publisher/__init__.py`
-- [ ] 创建 `src/publisher/base.py`
-
-### T4.2 公众号 API
-
-- [ ] 创建 `src/publisher/wechat.py`
-  - [ ] get_access_token() - 获取调用凭证
-  - [ ] upload_image() - 上传图片
-  - [ ] create_draft() - 创建草稿
-  - [ ] publish_draft() - 发布草稿 (可选)
-
-### T4.3 发布管理
-
-- [ ] 创建 `src/publisher/manager.py`
-  - [ ] 选取待发布文章
-  - [ ] 状态流转管理
-  - [ ] 发布结果回执
-
----
-
-## Phase 5: 调度中心
-
-### T5.1 调度器
-
-- [ ] 创建 `src/scheduler/__init__.py`
-- [ ] 创建 `src/scheduler/jobs.py`
-  - [ ] 采集任务 (interval)
-  - [ ] 处理任务 (queue 驱动)
-  - [ ] 发布任务 (cron)
-
-### T5.2 主程序
-
-- [ ] 创建 `src/main.py`
-  - [ ] 初始化配置
-  - [ ] 初始化数据库
-  - [ ] 启动调度器
-  - [ ] 信号处理 (优雅退出)
-
-### T5.3 通知
-
-- [ ] 创建 `src/notify.py`
-  - [ ] 钉钉 webhook 通知
-  - [ ] 邮件通知 (可选)
-  - [ ] 失败告警
-
----
-
-## Phase 6: 集成测试
-
-### T6.1 单元测试
-
-- [ ] 测试配置加载
-- [ ] 测试 RSS 解析
-- [ ] 测试数据库 CRUD
-- [ ] 测试 AI 改写调用
-
-### T6.2 集成测试
-
-- [ ] 端到端采集测试
-- [ ] 端到端处理测试
-- [ ] 模拟发布测试
-
-### T6.3 部署
-
-- [ ] 编写 Dockerfile
-- [ ] 编写 docker-compose.yml
-- [ ] 编写启动脚本
-
----
-
-## 任务依赖关系
-
-```
-T1.1 ──▶ T1.2 ──▶ T1.3 ──▶ T1.4
-                    │
-                    ▼
-T2.1 ──▶ T2.2 ──▶ T2.3 ──▶ T2.4
-                              │
-                              ▼
-T3.1 ──▶ T3.2 ──▶ T3.3 ──▶ T3.4 ──▶ T3.5
-                                        │
-                                        ▼
-T4.1 ──▶ T4.2 ──▶ T4.3
-                    │
-                    ▼
-T5.1 ──▶ T5.2 ──▶ T5.3
-     │
-     └──────────▶ T6.1 ──▶ T6.2 ──▶ T6.3
-```
-
----
-
-## 快速开始开发
+### 1. 环境准备
 
 ```bash
-# 1. 进入项目目录
-cd /root/.openclaw/workspace/auto-content-publisher
+# 克隆项目
+git clone https://github.com/sunnysmiling/auto-content-publisher.git
+cd auto-content-publisher
 
-# 2. 创建虚拟环境 (可选)
-python3 -m venv venv
-source venv/bin/activate
+# 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或 venv\Scripts\activate  # Windows
 
-# 3. 安装依赖
+# 安装依赖
 pip install -r requirements.txt
-
-# 4. 复制配置
-cp config/settings.yaml config/settings.yaml.bak
-# 编辑 settings.yaml 填入配置
-
-# 5. 创建 .env 文件
-echo "AI_API_KEY=your-key" > .env
-echo "WECHAT_APP_ID=your-app-id" >> .env
-echo "WECHAT_APP_SECRET=your-secret" >> .env
-
-# 6. 运行
-python src/main.py
 ```
 
----
+### 2. 配置
 
-**文档版本**: v0.1  
-**创建日期**: 2026-03-17
-**最后更新**: 2026-03-17
+编辑 `config/settings.yaml`:
+
+```yaml
+rss_feeds:
+  - https://example.com/feed.xml
+
+http_urls:
+  - https://example.com/article
+
+wechat:
+  app_id: your_app_id
+  app_secret: your_app_secret
+
+blog:
+  api_url: https://yourblog.com/wp-json
+  api_key: your_api_key
+```
+
+### 3. 运行
+
+```bash
+# 启动 API 服务
+python src/main.py --mode api
+
+# 启动定时调度
+python src/main.py --mode scheduler
+
+# 手动采集
+python src/main.py --mode fetch
+
+# 手动发布
+python src/main.py --mode publish
+```
+
+### 4. API 调用
+
+```bash
+# 健康检查
+curl http://localhost:5000/health
+
+# 手动采集
+curl -X POST http://localhost:5000/api/feeds/fetch \
+  -H "Content-Type: application/json" \
+  -d '{"urls": ["https://example.com/feed.xml"]}'
+
+# 发布文章
+curl -X POST http://localhost:5000/api/publish \
+  -H "Content-Type: application/json" \
+  -d '{"article": {"title": "Test", "content": "Content"}}'
+```
+
+## 维护指南
+
+### 查看日志
+
+```bash
+tail -f data/logs/app.log
+```
+
+### 备份数据
+
+```bash
+cp data/content.db data/content.db.backup
+```
+
+### 更新代码
+
+```bash
+git pull origin main
+pip install -r requirements.txt
+```
